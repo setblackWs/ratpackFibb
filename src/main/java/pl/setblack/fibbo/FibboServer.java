@@ -21,13 +21,13 @@ public class FibboServer {
                 .serverConfig(cfg->
                         cfg
                                 .development(false)
-                                .threads(1)
+                                .threads(10)
                                 .connectTimeoutMillis(60*1000))
                 .handlers(chain -> chain
                         .prefix("fibbo", fibbo
                                 -> fibbo.get(":n",
                                 ctx -> {
-                                    Blocking.exec(()->{
+                                    /*Blocking.exec(()->*/{
                                         long n = Long.parseLong(ctx.getPathTokens().get("n"));
                                         System.out.println("fibb ("+n+") Threads:" + Thread.activeCount());
                                         Thread.sleep(1000);
@@ -44,7 +44,7 @@ public class FibboServer {
 
 
                                         }
-                                    });
+                                    }
 
 
                                 }
