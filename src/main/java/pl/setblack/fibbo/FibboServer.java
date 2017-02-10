@@ -19,7 +19,7 @@ public class FibboServer {
         RatpackServer.start(ratpackServerSpec ->
                 ratpackServerSpec
                         .serverConfig(serverConfigBuilder ->
-                                serverConfigBuilder.threads(1)
+                                serverConfigBuilder.threads(4)
 
                         )
                         .handlers(
@@ -32,11 +32,21 @@ public class FibboServer {
 
         return ctx -> {
             final Long n = Long.parseLong(ctx.getPathTokens().get("n"));
+            //System.out.println("Fibb ("+n+")   t:"+Thread.activeCount());
+            if ( n < 2 ) {
+                ctx.render(String.valueOf(1));
+            } else {
+                 Promise<Long> fibbn_1 = httpClient.get(new URI("http://localhost:5050/fibbo/"+(n-1)))
+                         .map( resp -> Long.parseLong(resp.getBody().getText()));
+                Promise<Long> fibbn_2 = httpClient.get(new URI("http://localhost:5050/fibbo/"+(n-2)))
+                        .map( resp -> Long.parseLong(resp.getBody().getText()));
+                fibbn_1.then( f1Val -> fibbn_2.then(f2Val -> ctx.render(String.valueOf(f1Val + f2Val))));
 
-            ctx.render(String.valueOf(n));
+            }
 
         };
     }
+
 
 
 }
