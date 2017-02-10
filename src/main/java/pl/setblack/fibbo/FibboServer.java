@@ -19,7 +19,7 @@ public class FibboServer {
         RatpackServer.start(ratpackServerSpec ->
                 ratpackServerSpec
                         .serverConfig(serverConfigBuilder ->
-                                serverConfigBuilder.threads(4)
+                                serverConfigBuilder.threads(200)
 
                         )
                         .handlers(
