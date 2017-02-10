@@ -17,7 +17,11 @@ public class FibboServer {
     public static void main(String... args) throws Exception {
         final HttpClient httpClient = HttpClient.of(rs->rs.readTimeout(Duration.ofMinutes(2)));
 
-        RatpackServer.start(server -> server
+        createServer(httpClient);
+    }
+
+    public static RatpackServer createServer(HttpClient httpClient) throws Exception {
+        return RatpackServer.start(server -> server
                 .serverConfig(cfg->
                         cfg
                                 .development(false)
