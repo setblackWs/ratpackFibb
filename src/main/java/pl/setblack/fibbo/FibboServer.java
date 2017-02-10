@@ -30,8 +30,14 @@ public class FibboServer {
     private static Handler fibbHandler() {
         return ctx -> {
             System.out.println("me waiting");
-            Thread.sleep(4000);
-            ctx.render("7");
+            Blocking.exec(
+                    ()->{
+                        Thread.sleep(4000);
+                        System.out.println("was waiting");
+                        ctx.render("7");
+                    }
+            );
+
         };
     }
 
