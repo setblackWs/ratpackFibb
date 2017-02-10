@@ -2,6 +2,7 @@ package pl.setblack.fibbo;
 
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
+import ratpack.handling.Handler;
 import ratpack.http.client.HttpClient;
 import ratpack.server.RatpackServer;
 
@@ -16,12 +17,23 @@ public class FibboServer {
 
     public static void main(String... args) throws Exception {
         RatpackServer.start(ratpackServerSpec ->
-                ratpackServerSpec.handlers(
-                        chain -> chain.prefix("fibbo", fibbo -> fibbo.get(":n", ctx -> ctx.render("7")))));
+                ratpackServerSpec
+                        .serverConfig(serverConfigBuilder ->
+                                serverConfigBuilder.threads(1)
+
+                        )
+                        .handlers(
+                                chain -> chain.prefix("fibbo", fibbo -> fibbo.get(":n", fibbHandler()))));
 
     }
 
-
+    private static Handler fibbHandler() {
+        return ctx -> {
+            System.out.println("me waiting");
+            Thread.sleep(4000);
+            ctx.render("7");
+        };
+    }
 
 
 }
