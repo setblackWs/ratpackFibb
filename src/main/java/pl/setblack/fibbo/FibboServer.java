@@ -15,7 +15,9 @@ import java.time.Duration;
 public class FibboServer {
 
     public static void main(String... args) throws Exception {
-
+        RatpackServer.start(ratpackServerSpec ->
+                ratpackServerSpec.handlers(
+                        chain -> chain.prefix("fibbo", fibbo -> fibbo.get(":n", ctx -> ctx.render("7")))));
 
     }
 
