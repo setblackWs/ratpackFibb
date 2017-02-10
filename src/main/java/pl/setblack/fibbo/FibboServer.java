@@ -46,11 +46,8 @@ public class FibboServer {
                                                     v2-> ctx.render(String.valueOf(v1+v2))
                                             ));
 
-
                                         }
                                     }
-
-
                                 }
                 ))
         ));

@@ -3,7 +3,6 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
 buildscript {
     repositories {
         mavenCentral()
@@ -31,11 +30,6 @@ repositories {
 dependencies {
     compile group: 'io.ratpack', name: 'ratpack-core', version: '1.4.4'
     compile 'com.google.code.findbugs:jsr305:3.0.1'
-    compile 'io.javaslang:javaslang:2.1.0-alpha'
-    compile 'io.javaslang:javaslang-jackson:2.1.0-alpha'
-    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.0.5'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
-    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-parameter-names', version: '2.8.6'
 
     testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
