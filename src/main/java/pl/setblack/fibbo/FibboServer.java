@@ -27,16 +27,13 @@ public class FibboServer {
 
     }
 
-    private static Handler fibbHandler() {
+    private static Handler fibbHandler() throws Exception{
+        final HttpClient httpClient = HttpClient.of(rs->rs.readTimeout(Duration.ofMinutes(2)));
+
         return ctx -> {
-            System.out.println("me waiting");
-            Blocking.exec(
-                    ()->{
-                        Thread.sleep(4000);
-                        System.out.println("was waiting");
-                        ctx.render("7");
-                    }
-            );
+            final Long n = Long.parseLong(ctx.getPathTokens().get("n"));
+
+            ctx.render(String.valueOf(n));
 
         };
     }
