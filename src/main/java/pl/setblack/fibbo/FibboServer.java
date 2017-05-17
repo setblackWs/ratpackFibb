@@ -1,6 +1,5 @@
 package pl.setblack.fibbo;
 
-import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 import ratpack.http.client.HttpClient;
 import ratpack.server.RatpackServer;
@@ -17,14 +16,19 @@ public class FibboServer {
     public static void main(String... args) throws Exception {
         final HttpClient httpClient = HttpClient.of(rs -> rs.readTimeout(Duration.ofMinutes(2)));
 
-        createServer(httpClient);
+        long time = System.currentTimeMillis();
+        for (int i =0 ; i < 1000; i++) {
+            RatpackServer server = createServer(httpClient);
+            server.stop();
+        }
+        System.out.println("total starts:"+(System.currentTimeMillis()-time));
     }
 
-    public static RatpackServer createServer(HttpClient httpClient) throws Exception {
+    public static RatpackServer createServer(final HttpClient httpClient) throws Exception {
         return RatpackServer.start(server -> server
                 .serverConfig(cfg ->
                         cfg
-                                .development(true)
+                                .development(false)
                                 .threads(1)
                                 .connectTimeoutMillis(60 * 1000))
                 .handlers(chain -> chain
@@ -32,15 +36,14 @@ public class FibboServer {
                                 -> fibbo.get(":n",
                                 ctx -> {
                                     long n = Long.parseLong(ctx.getPathTokens().get("n"));
-
-                                    if (n < 2) {
-                                        ctx.render("1");
+                                    if (n <= 2) {
+                                        ctx.render(String.valueOf(n));
                                     } else {
-                                        Promise<Long> result1 = requestFibb(n - 1, httpClient);
-                                        Promise<Long> result2 = requestFibb(n - 2, httpClient);
-                                        result1.then(v1 -> result2.then(
-                                                v2 -> ctx.render(String.valueOf(v1 + v2))
-                                        ));
+                                        Promise<Long> n1 = requestFibb(n - 1, httpClient);
+                                        Promise<Long> n2 = requestFibb(n - 2, httpClient);
+                                        Promise<Long> resultLong = n1.flatMap(x -> n2.map(y -> y + x));
+                                        Promise<String> result = resultLong.map(r -> String.valueOf(r));
+                                        ctx.render(result);
                                     }
                                 }
                         ))));
