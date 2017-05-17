@@ -16,12 +16,8 @@ public class FibboServer {
     public static void main(String... args) throws Exception {
         final HttpClient httpClient = HttpClient.of(rs -> rs.readTimeout(Duration.ofMinutes(2)));
 
-        long time = System.currentTimeMillis();
-        for (int i =0 ; i < 1000; i++) {
-            RatpackServer server = createServer(httpClient);
-            server.stop();
-        }
-        System.out.println("total starts:"+(System.currentTimeMillis()-time));
+        createServer(httpClient);
+
     }
 
     public static RatpackServer createServer(final HttpClient httpClient) throws Exception {
