@@ -14,13 +14,14 @@ import java.time.Duration;
 public class FibboServer {
 
     public static void main(String... args) throws Exception {
-        final HttpClient httpClient = HttpClient.of(rs -> rs.readTimeout(Duration.ofMinutes(2)));
-
-        createServer(httpClient);
+        createServer();
 
     }
 
-    public static RatpackServer createServer(final HttpClient httpClient) throws Exception {
+    public static RatpackServer createServer() throws Exception {
+        final HttpClient httpClient = HttpClient.of(rs -> rs.readTimeout(Duration.ofMinutes(2)));
+
+
         return RatpackServer.start(server -> server
                 .serverConfig(cfg ->
                         cfg
