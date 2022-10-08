@@ -11,6 +11,4 @@ target/
 .tmp/
 .logs
 build/
-gradlew
-gradlew.bat
-airomem/
+

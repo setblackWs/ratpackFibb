@@ -26,12 +26,12 @@ public class FibboServer {
                 .serverConfig(cfg ->
                         cfg
                                 .development(true)
-                                .threads(200)
-                                .port(5050)
+                                .threads(10)
+                                .port(8080)
                                 .connectTimeoutMillis(60 * 1000))
                 .handlers(chain -> chain
-                        .prefix("fibbo", fibbo
-                                -> fibbo.get(":n", // URL example: /fibbo/5
+                        .prefix("fib", fibbo
+                                -> fibbo.get(":n", // URL example: /fib/5
                                 ctx -> {
                                     long n = Long.parseLong(ctx.getPathTokens().get("n"));
                                     if (n <= 2) {
@@ -50,7 +50,7 @@ public class FibboServer {
     private static Promise<Long> requestFibb(long n, HttpClient httpClient) throws URISyntaxException {
         try {
 
-            return httpClient.get(new URI("http://localhost:5050/fibbo/" + n))
+            return httpClient.get(new URI("http://localhost:8080/fib/" + n))
                     .map(resp -> Long.parseLong(resp.getBody().getText()));
         } catch (Exception e) {
             throw new IllegalStateException(e);
